@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-  <div class="w-full p-10 bg-white shadow">
+  <div class="w-full sm:p-10 p-6 bg-white shadow">
     @livewire('admin.users.users-table')
   </div>
 @endsection

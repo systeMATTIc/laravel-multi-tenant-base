@@ -1,6 +1,6 @@
 <form wire:submit.prevent="submit" class="w-full">
-    <div class="flex items-center -mx-4">
-        <div class="w-1/2 mx-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4">
+        <div class="sm:w-1/2 sm:mx-4">
             <label for="name" class="block text-sm font-medium text-gray-700 leading-5">
                 Name
             </label>
@@ -14,7 +14,7 @@
             @enderror
         </div>
 
-        <div class="w-1/2 mx-4">
+        <div class="sm:w-1/2 sm:mx-4 mt-4 sm:mt-0">
             <label for="domain" class="block text-sm font-medium text-gray-700 leading-5">
                 (Sub) Domain
             </label>

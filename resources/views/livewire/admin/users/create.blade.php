@@ -1,6 +1,6 @@
 <form wire:submit.prevent="submit" class="w-full">
-    <div class="flex items-center -mx-4">
-        <div class="w-1/2 mx-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4">
+        <div class="sm:w-1/2 sm:mx-4">
             <label for="first_name" class="block text-sm font-medium text-gray-700 leading-5">
                 First Name
             </label>
@@ -14,7 +14,7 @@
             @enderror
         </div>
 
-        <div class="w-1/2 mx-4">
+        <div class="sm:w-1/2 sm:mx-4 mt-4 sm:mt-0">
             <label for="last_name" class="block text-sm font-medium text-gray-700 leading-5">
                 Last Name
             </label>
@@ -29,8 +29,8 @@
         </div>
     </div>
 
-    <div class="flex items-center -mx-4 mt-6">
-        <div class="w-1/2 mx-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4 sm:mt-6 mt-4">
+        <div class="sm:w-1/2 sm:mx-4">
             <label for="email" class="block text-sm font-medium text-gray-700 leading-5">
                 Email
             </label>
@@ -44,7 +44,7 @@
             @enderror
         </div>
 
-        <div class="w-1/2 mx-4">
+        <div class="sm:w-1/2 sm:mx-4 mt-4 sm:mt-0">
             <label for="password" class="block text-sm font-medium text-gray-700 leading-5">
                 Password
             </label>
@@ -59,24 +59,26 @@
         </div>
     </div>
 
-    <div class="w-full mt-6">
-        <label for="roles" class="block text-sm font-medium text-gray-700 leading-5">
-            Roles
-        </label>
+    <div class="flex flex-col mt-4  overflow-x-hidden">
+        <div class="">
+            <label for="roles" class="block text-sm font-medium text-gray-700 leading-5">
+                Roles
+            </label>
 
-        <div wire:ignore class="mt-1 rounded-md shadow-sm">
-            <select class="select2 w-full @error('selectedRoles') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" multiple required>
-                @foreach($roles as $role)
-                    <option value="{{ $role->id }}">
-                        {{ $role->title }}
-                    </option>
-                @endforeach
-            </select>
+            <div wire:ignore class="mt-1 rounded-md shadow-sm">
+                <select class="select2 block w-full @error('selectedRoles') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" multiple required>
+                    @foreach($roles as $role)
+                        <option value="{{ $role->id }}">
+                            {{ $role->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            @error('selectedRoles')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </div>
-
-        @error('selectedRoles')
-            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-        @enderror
     </div>
 
     <div class="flex items-center justify-end mt-6 -mx-4">

@@ -7,7 +7,7 @@
 
             @include('admin._partials.sidebar-nav')
 
-            <div class="flex flex-col ml-16 w-full">
+            <div class="flex flex-col lg:ml-16 w-full overflow-auto">
                 @hasSection('pageTitle')
                     @yield('pageTitle')
                 @endif

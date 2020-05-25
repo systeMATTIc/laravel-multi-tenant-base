@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-  <div class="w-full p-10 bg-white shadow">
+  <div class="w-full p-6 sm:p-10 bg-white shadow">
     @livewire('admin.roles.edit-form', ['abilities' => $abilities, 'role' => $role])
   </div>
 @endsection

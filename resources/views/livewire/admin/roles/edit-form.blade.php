@@ -1,6 +1,6 @@
 <form wire:submit.prevent="submit" class="w-full">
-    <div class="flex items-center -mx-4">
-        <div class="w-1/2 mx-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4">
+        <div class="sm:w-1/2 sm:mx-4">
             <label for="title" class="block text-sm font-medium text-gray-700 leading-5">
                 Title
             </label>
@@ -14,7 +14,7 @@
             @enderror
         </div>
 
-        <div class="w-1/2 mx-4">
+        <div class="sm:w-1/2 sm:mx-4 mt-4 sm:mt-0">
             <label for="name" class="block text-sm font-medium text-gray-700 leading-5">
                 Name
             </label>
@@ -29,24 +29,26 @@
         </div>
     </div>
 
-    <div class="w-full mt-6">
-        <label for="selectedAbilities" class="block text-sm font-medium text-gray-700 leading-5">
-            Abilities
-        </label>
+    <div class="flex flex-col mt-4  overflow-x-hidden">
+        <div class="">
+            <label for="selectedAbilities" class="block text-sm font-medium text-gray-700 leading-5">
+                Abilities
+            </label>
 
-        <div wire:ignore class="mt-1 rounded-md shadow-sm">
-            <select class="select2 w-full @error('domain') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" multiple required>
-                @foreach($abilities as $ability)
-                    <option value="{{ $ability->id }}" {{ in_array($ability->id, $selectedAbilities) ? "selected" : "" }}>
-                        {{ $ability->title }}
-                    </option>
-                @endforeach
-            </select>
+            <div wire:ignore class="mt-1 rounded-md shadow-sm">
+                <select class="select2 w-full @error('domain') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" multiple required>
+                    @foreach($abilities as $ability)
+                        <option value="{{ $ability->id }}" {{ in_array($ability->id, $selectedAbilities) ? "selected" : "" }}>
+                            {{ $ability->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            @error('selectedAbilities')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </div>
-
-        @error('selectedAbilities')
-            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-        @enderror
     </div>
 
     <div class="flex items-center justify-end mt-6 w-full">
