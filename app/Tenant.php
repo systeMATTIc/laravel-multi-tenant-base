@@ -10,11 +10,11 @@ class Tenant extends TenantManager
 {
     protected $guarded = [];
 
-    public static function uniqueRule($table, $column = 'NULL')
+    public static function uniqueRule($table, $column = 'NULL', $scope = 'tenant_id')
     {
         $unique = new Unique($table, $column);
 
-        return $unique->where('tenant_id', tenant()->id);
+        return $unique->where($scope, tenant()->id);
     }
 
     public static function existsRule($table, $column = 'NULL')

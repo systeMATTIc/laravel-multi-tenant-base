@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Silber\Bouncer\Bouncer;
 
 class RolesController extends Controller
@@ -24,7 +23,7 @@ class RolesController extends Controller
     {
         $this->authorize('view-roles');
 
-        return view('admin.roles.index');
+        return view('roles.index');
     }
 
     /**
@@ -36,8 +35,12 @@ class RolesController extends Controller
     {
         $this->authorize('create-role');
 
-        return view('admin.roles.create', [
-            'abilities' => $this->bouncer->ability()->all()
+        $abilites = $this->bouncer->ability()->query()->where([
+            'scope' => tenant()->id
+        ])->get();
+
+        return view('roles.create', [
+            'abilities' => $abilites
         ]);
     }
 
@@ -51,8 +54,12 @@ class RolesController extends Controller
     {
         $this->authorize('edit-role');
 
-        return view('admin.roles.edit', [
-            'abilities' => $this->bouncer->ability()->all(),
+        $abilites = $this->bouncer->ability()->query()->where([
+            'scope' => tenant()->id
+        ])->get();
+
+        return view('roles.edit', [
+            'abilities' => $abilites,
             'role' => $this->bouncer->role()->with('abilities')->findOrFail($id)
         ]);
     }

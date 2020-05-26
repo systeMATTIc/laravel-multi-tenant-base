@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable
 {
-    use Notifiable, BelongsToTenant;
+    use Notifiable, BelongsToTenant, HasRolesAndAbilities;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name','email', 'password', 'tenant_id', 'settings'
+        'first_name', 'last_name','email', 'password', 'tenant_id', 'settings', 'is_super'
     ];
 
     /**
@@ -40,5 +41,14 @@ class User extends Authenticatable
     public function getNameAttribute()
     {
         return "$this->first_name $this->last_name";
+    }
+
+    public static function search($query)
+    {
+        return empty($query) ? static::query() : static::query()
+            ->where('first_name', 'like', "%$query%")
+            ->orWhere('last_name', 'like', "%$query%")
+            ->orWhere('email', 'like', "%$query%")
+        ;
     }
 }
