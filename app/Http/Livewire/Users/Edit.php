@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Users;
+namespace App\Http\Livewire\Users;
 
 use App\Administrator;
+use App\Tenant;
+use App\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,28 +32,28 @@ class Edit extends Component
     public $superadmin = false;
 
     /** @var Administrator */
-    public $administrator = null;
+    public $user = null;
 
     public ?array $selectedRoles;
 
     public $adminRoles;
 
-    public function mount(Administrator $administrator)
+    public function mount(User $user)
     {
-        $this->administrator = $administrator;
-        
-        $this->firstName = $administrator->first_name;
-        $this->lastName = $administrator->last_name;
-        $this->email = $administrator->email;
-        $this->superadmin = $administrator->is_super;
-        $this->adminRoles = $administrator->getRoles()->toArray();
+        $this->user = $user;
+
+        $this->firstName = $user->first_name;
+        $this->lastName = $user->last_name;
+        $this->email = $user->email;
+        $this->superadmin = (bool) $user->is_super;
+        $this->adminRoles = $user->getRoles()->toArray();
     }
 
     public function submit()
     {
-        $this->authorizeForUser(auth('admin')->user(), 'edit-administrator');
+        $this->authorizeForUser(auth()->user(), 'edit-user');
 
-        $validAdmin = Validator::make(
+        $validUser = Validator::make(
             [
                 'first_name' => $this->firstName,
                 'last_name' => $this->lastName,
@@ -64,12 +66,12 @@ class Edit extends Component
                 'first_name' => 'required|min:3',
                 'last_name' => 'required|min:3',
                 'email' => [
-                    'required', 
-                    'email', 
-                    Rule::unique(
-                        'administrators'
+                    'required',
+                    'email',
+                    Tenant::uniqueRule(
+                        'users'
                     )->ignoreModel(
-                        $this->administrator
+                        $this->user
                     )
                 ],
                 'password' => 'nullable|alpha_num|min:6',
@@ -77,28 +79,39 @@ class Edit extends Component
                 'roles' => 'required|array|min:1'
             ]
         )->validate();
-        
-        $administrator = empty($validAdmin['password']) 
-            ? array_filter($validAdmin)
-            : array_merge($validAdmin, [
-                'password' => Hash::make($validAdmin['password'])
+                        
+        $user = empty($validUser['password']) 
+            ? array_filter($validUser)
+            : array_merge($validUser, [
+                'password' => Hash::make($validUser['password']),
             ])
         ;
 
-        $this->administrator->update($administrator);
+        $user = array_merge($user, ['is_super' => $this->superadmin]);
 
-        $this->administrator->roles()->detach();
+        $this->user->update($user);
 
-        $this->administrator->assign($validAdmin['roles']);
+        /** @var \Silber\Bouncer\Bouncer */
+        $bouncer = app(Bouncer::class);
 
-        return redirect()->route('admin.users.index');
+        $bouncer->scope()->onceTo(tenant()->id, function () use ($validUser) {
+            $this->user->roles()->detach();
+            $this->user->assign($validUser['roles']);
+        });
+
+        return redirect()->route('users.index');
     }
 
     public function render()
     {
-        $availableRoles = app(Bouncer::class)->role()->all();
+        /** @var \Silber\Bouncer\Bouncer */
+        $bouncer = app(Bouncer::class);
 
-        return view('livewire.admin.users.edit', [
+        $availableRoles = $bouncer->role()->query()->where([
+            'scope' => tenant()->id
+        ])->get();
+
+        return view('livewire.users.edit', [
             'roles' => $availableRoles,
         ]);
     }

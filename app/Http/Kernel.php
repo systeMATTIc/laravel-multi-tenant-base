@@ -48,6 +48,7 @@ class Kernel extends HttpKernel
             'web',
             \App\Http\Middleware\EnsureValidTenantSession::class,
             \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+            \App\Http\Middleware\ScopeBouncer::class
         ],
 
         'not.tenant' => [

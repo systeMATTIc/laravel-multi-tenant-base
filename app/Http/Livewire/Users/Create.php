@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Users;
+namespace App\Http\Livewire\Users;
 
-use App\Administrator;
+use App\Tenant;
+use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
@@ -33,7 +34,7 @@ class Create extends Component
 
     public function submit()
     {
-        $this->authorizeForUser(auth('admin')->user(), 'create-administrator');
+        $this->authorizeForUser(auth()->user(), 'create-user');
 
         $validAdmin = Validator::make(
             [
@@ -47,15 +48,15 @@ class Create extends Component
             [
                 'first_name' => 'required|min:3',
                 'last_name' => 'required|min:3',
-                'email' => 'required|email|unique:administrators',
+                'email' => ['required', 'email', Tenant::uniqueRule('users')],
                 'password' => 'required|alpha_num|min:6',
                 'is_super' => 'boolean',
                 'roles' => 'required|array|min:1'
             ]
         )->validate();
 
-        /** @var Administrator */
-        $admin = Administrator::query()->create([
+        /** @var User */
+        $admin = User::query()->create([
             'first_name' => $validAdmin['first_name'],
             'last_name' => $validAdmin['last_name'],
             'email' => $validAdmin['email'],
@@ -63,18 +64,30 @@ class Create extends Component
             'is_super' => $validAdmin['is_super'],
         ]);
         
-        $admin->assign($validAdmin['roles']);
+        /** @var \Silber\Bouncer\Bouncer */
+        $bouncer = app(Bouncer::class);
+
+        $bouncer->scope()->onceTo(tenant()->id, function () use ($admin, $validAdmin) {
+            $admin->assign($validAdmin['roles']);
+        });
+
+        // $admin->assign($validAdmin['roles']);
         
         event(new Registered($admin));
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('users.index');
     }
 
     public function render()
     {
-        $availableRoles = app(Bouncer::class)->role()->all();
+        /** @var \Silber\Bouncer\Bouncer */
+        $bouncer = app(Bouncer::class);
 
-        return view('livewire.admin.users.create', [
+        $availableRoles = $bouncer->role()->query()->where([
+            'scope' => tenant()->id
+        ])->get();
+        
+        return view('livewire.users.create', [
             'roles' => $availableRoles
         ]);
     }

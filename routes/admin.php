@@ -22,6 +22,7 @@ Route::view('password/reset', 'admin.auth.passwords.email')->name('password.requ
 Route::get('password/reset/{token}', 'Auth\PasswordResetController')->name('password.reset');
 
 Route::middleware('auth:admin')->group(function () {
+    
     Route::view('/', 'admin.welcome')->name('home');
 
     Route::view('email/verify', 'admin.auth.verify')->middleware('throttle:6,1')->name('verification.notice');
@@ -35,5 +36,5 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::resource('users', 'AdministratorsController')->except(['store', 'update']);
 
-    Route::resource('roles', 'RolesController');
+    Route::resource('roles', 'RolesController')->except(['store', 'update']);
 });
