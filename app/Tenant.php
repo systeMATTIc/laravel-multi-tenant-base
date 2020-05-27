@@ -17,11 +17,11 @@ class Tenant extends TenantManager
         return $unique->where($scope, tenant()->id);
     }
 
-    public static function existsRule($table, $column = 'NULL')
+    public static function existsRule($table, $scope = 'tenant_id', $column = 'NULL')
     {
         $unique = new Exists($table, $column);
 
-        return $unique->where('tenant_id', tenant()->id);
+        return $unique->where($scope, tenant()->id);
     }
 
     public static function search($query)
