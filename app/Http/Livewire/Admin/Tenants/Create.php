@@ -35,7 +35,7 @@ class Create extends Component
 
     public function submit()
     {
-        // $this->authorizeForUser(auth('admin')->user(), 'create-tenant');
+        $this->authorizeForUser(auth('admin')->user(), 'create-tenant');
 
         $validTenant = Validator::make(
             [
