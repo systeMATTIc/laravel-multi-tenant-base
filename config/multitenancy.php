@@ -52,7 +52,7 @@ return [
     /*
      * The connection name to reach the a landlord database
      */
-    'landlord_database_connection_name' => 'mysql',
+    'landlord_database_connection_name' => null,
 
     /*
      * This key will be used to bind the current tenant in the container.
