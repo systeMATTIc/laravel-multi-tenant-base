@@ -3,9 +3,13 @@
     <a class="lg:px-12 px-6 py-5" href="{{ route('home') }}">
       <x-logo class="w-auto h-8 mx-auto text-indigo-600" />
     </a>
+   
     <div class="hidden lg:block lg:px-12 px-4">
+
       @if (Route::has('login'))
         <div class="space-x-4">
+        @livewire('notifications')
+
           @auth()
             <span class="font-medium text-gray-400 transition ease-in-out duration-150">
               {{ auth()->user()->name }}
@@ -21,10 +25,17 @@
         </div>
       @endif
     </div>
-
-    <button class="flex items-center lg:hidden text-indigo-400 focus:outline-none focus:bg-transparent focus:text-indigo-500 px-6 py-5" @click="open = ! open">
-      <svg class="fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-    </button>
+    
+    
+    <div class="flex items-center lg:hidden">
+      @livewire('notifications')
+      <div class="flex items-center hover:bg-indigo-100 text-indigo-400 focus:outline-none focus:bg-transparent focus:text-indigo-500 p-6" @click="open = ! open">
+        <svg class="fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+        </svg>
+      </div>
+    </div>
+    
   </div>
 
   <div 
