@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 
@@ -17,8 +17,8 @@ class Notifications extends Component
 
     public function updateNotifications()
     {
-        /** @var \App\User */
-        $user = auth()->user();
+        /** @var \App\Administrator */
+        $user = auth('admin')->user();
 
         $this->unreadNotifications = $user->unreadNotifications;
     }
@@ -34,16 +34,16 @@ class Notifications extends Component
 
     public function getCurrentNotification()
     {
-        /** @var \App\User */
-        $user = auth()->user();
+        /** @var \App\Administrator */
+        $admin = auth('admin')->user();
 
-        return $user->notifications()->getQuery()->where([
+        return $admin->notifications()->getQuery()->where([
             'id' => $this->notificationId
         ])->first();
     }
 
     public function render()
     {
-        return view('livewire.notifications');
+        return view('livewire.admin.notifications');
     }
 }
