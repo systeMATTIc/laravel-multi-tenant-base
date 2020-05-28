@@ -3,28 +3,31 @@
     <a class="lg:px-12 px-6 py-5" href="{{ route('admin.home') }}">
       <x-logo class="w-auto h-8 mx-auto text-indigo-600" />
     </a>
-    <div class="hidden lg:block lg:px-12 px-4">
-      @if (Route::has('admin.login'))
-        <div class="space-x-4">
-          @auth('admin')
-            <span class="font-medium text-gray-400 transition ease-in-out duration-150">
-              {{ auth('admin')->user()->name }}
-            </span>
-            <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-              Log out
-            </a>
 
-            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-              @csrf
-            </form>
-          @endauth
-        </div>
-      @endif
+    <div class="flex justify-between items-center">
+      
+      @livewire('admin.notifications')
+
+      <div class="space-x-4 hidden lg:block px-6">
+        <span class="font-medium text-gray-400 transition ease-in-out duration-150">
+          {{ auth('admin')->user()->name }}
+        </span>
+        <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+          Log out
+        </a>
+
+        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+          @csrf
+        </form>
+      </div>
+      
+      <div class="flex items-center cursor-pointer lg:hidden hover:bg-indigo-100 text-indigo-400 focus:text-indigo-500 p-6" @click="open = ! open">
+        <svg class="fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+        </svg>
+      </div>
     </div>
 
-    <button class="flex items-center lg:hidden text-indigo-400 focus:outline-none focus:bg-transparent focus:text-indigo-500 px-6 py-5" @click="open = ! open">
-      <svg class="fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-    </button>
   </div>
 
   <div 
