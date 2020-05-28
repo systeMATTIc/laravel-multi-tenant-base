@@ -11,9 +11,9 @@
       @livewire('notifications')
 
       <div class="space-x-4 hidden lg:block px-6">
-        <span class="font-medium text-gray-400 transition ease-in-out duration-150">
+        <a href="{{ route('profile') }}" class="font-medium px-2 py-6 text-gray-400 hover:bg-indigo-50 cursor-pointer transition ease-in-out duration-150">
           {{ auth()->user()->name }}
-        </span>
+        </a>
         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
           Log out
         </a>
@@ -45,9 +45,9 @@
   >
     <div class="flex justify-end">
       @auth()
-        <span class="px-2 py-4  font-medium text-gray-400 transition ease-in-out duration-150">
+        <a href="{{ route('profile') }}" class="px-2 py-4 font-medium text-gray-400 hover:bg-indigo-50 cursor-pointer transition ease-in-out duration-150">
           {{ auth()->user()->name }}
-        </span>
+        </a>
         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" 
           class="px-8 py-4 block h-full cursor-pointer font-medium text-indigo-600 hover:text-indigo-500 hover:bg-indigo-100 focus:outline-none focus:underline transition ease-in-out duration-150"
         >
