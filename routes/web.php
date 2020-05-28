@@ -37,5 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', 'UsersController')->except(['store', 'update']);
 
     Route::resource('roles', 'RolesController')->except(['store', 'update']);
+
+    Route::livewire('profile', 'profile')->layout('layouts.app');
 });
 
