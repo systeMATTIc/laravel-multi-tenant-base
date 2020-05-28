@@ -37,4 +37,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('users', 'AdministratorsController')->except(['store', 'update']);
 
     Route::resource('roles', 'RolesController')->except(['store', 'update']);
+
+    Route::livewire('profile', 'admin.profile')->layout('admin.layouts.app');
+
 });
