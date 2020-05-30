@@ -22,7 +22,7 @@ Route::view('password/reset', 'admin.auth.passwords.email')->name('password.requ
 Route::get('password/reset/{token}', 'Auth\PasswordResetController')->name('password.reset');
 
 Route::middleware('auth:admin')->group(function () {
-    
+
     Route::view('/', 'admin.welcome')->name('home');
 
     Route::view('email/verify', 'admin.auth.verify')->middleware('throttle:6,1')->name('verification.notice');
@@ -36,8 +36,27 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::resource('users', 'AdministratorsController')->except(['store', 'update']);
 
-    Route::resource('roles', 'RolesController')->except(['store', 'update']);
+    // Route::resource('roles', 'RolesController')->except(['store', 'update']);
+
+    Route::livewire('roles', 'admin.roles.roles-table')
+        ->layout('admin.layouts.app')
+        ->name('roles.index')
+        ->middleware('can:view-roles');
+
+    Route::livewire('roles/{id}/edit', 'admin.roles.edit-form')
+        ->layout('admin.layouts.app')
+        ->name('roles.edit')
+        ->middleware('can:edit-role');
+
+    Route::livewire('roles/create', 'admin.roles.create-form')
+        ->layout('admin.layouts.app')
+        ->name('roles.create')
+        ->middleware('can:create-role');
+
+    Route::delete('roles/{id}', 'RolesController@destroy')
+        ->name('roles.delete')
+        ->middleware('can:delete-role');
+
 
     Route::livewire('profile', 'admin.profile')->layout('admin.layouts.app')->name('profile');
-
 });

@@ -7,32 +7,26 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Silber\Bouncer\Bouncer;
-use Silber\Bouncer\Database\Role;
+use App\Role;
 
 class EditForm extends Component
 {
     use AuthorizesRequests;
 
     public $title;
-    
+
     public $name;
-    
+
     public $selectedAbilities;
-    
-    public $abilities;
 
-    /** @var Role */
-    public $role = null;
+    public $roleId;
 
-    public function mount($abilities, Role $role)
+    public function mount($id)
     {
-        $this->abilities = $abilities;
-        $this->role = $role;
-
-        $this->title = $role->title;
-        $this->name = $role->name;
-        $this->selectedAbilities = $role->getAbilities()->pluck('id')->toArray();
-        
+        $this->roleId = $id;
+        $this->title = $this->role->title;
+        $this->name = $this->role->name;
+        $this->selectedAbilities = $this->role->getAbilities()->pluck('id')->toArray();
     }
 
     public function submit()
@@ -46,8 +40,8 @@ class EditForm extends Component
                 'abilities' => $this->selectedAbilities
             ],
             [
-                'title' => ['required', 'min:3', Rule::unique('roles')->ignoreModel($this->role)],
-                'name' => ['required', 'min:3', Rule::unique('roles')->ignoreModel($this->role)],
+                'title' => ['required', 'min:3', Rule::unique('roles')->whereNull('scope')->ignoreModel($this->role)],
+                'name' => ['required', 'min:3', Rule::unique('roles')->whereNull('scope')->ignoreModel($this->role)],
                 'abilities' => 'required|array|min:1'
             ]
         )->validate();
@@ -65,8 +59,30 @@ class EditForm extends Component
         return redirect()->route('admin.roles.index');
     }
 
+    public function getRoleProperty()
+    {
+        /** @var Bouncer  */
+        $bouncer = app(Bouncer::class);
+
+        return $bouncer->role()->with('abilities')->findOrFail(
+            $this->roleId
+        );
+    }
+
+    public function getAbilitiesProperty()
+    {
+        /** @var Bouncer  */
+        $bouncer = app(Bouncer::class);
+
+        return $bouncer->ability()->query()->where([
+            'scope' => null
+        ])->get();
+    }
+
     public function render()
     {
-        return view('livewire.admin.roles.edit-form');
+        return view('livewire.admin.roles.edit-form', [
+            'abilities' => $this->abilities
+        ]);
     }
 }

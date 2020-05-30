@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Roles;
 
 use App\Tenant;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -15,25 +16,19 @@ class EditForm extends Component
     use AuthorizesRequests;
 
     public $title;
-    
+
     public $name;
-    
+
     public $selectedAbilities;
-    
-    public $abilities;
 
-    /** @var Role */
-    public $role = null;
+    public $roleId;
 
-    public function mount($abilities, Role $role)
+    public function mount($id)
     {
-        $this->abilities = $abilities;
-        $this->role = $role;
-
-        $this->title = $role->title;
-        $this->name = $role->name;
-        $this->selectedAbilities = $role->getAbilities()->pluck('id')->toArray();
-        
+        $this->roleId = $id;
+        $this->title = $this->role->title;
+        $this->name = $this->role->name;
+        $this->selectedAbilities = $this->role->getAbilities()->pluck('id')->toArray();
     }
 
     public function submit()
@@ -70,8 +65,34 @@ class EditForm extends Component
         return redirect()->route('roles.index');
     }
 
+    public function getRoleProperty()
+    {
+        /** @var Bouncer  */
+        $bouncer = app(Bouncer::class);
+
+        try {
+            return $bouncer->role()->with('abilities')
+                ->where(['scope' => tenant()->id])
+                ->findOrFail($this->roleId);
+        } catch (ModelNotFoundException $e) {
+            abort(404);
+        }
+    }
+
+    public function getAbilitiesProperty()
+    {
+        /** @var Bouncer  */
+        $bouncer = app(Bouncer::class);
+
+        return $bouncer->ability()->query()->where([
+            'scope' => tenant()->id
+        ])->get();
+    }
+
     public function render()
     {
-        return view('livewire.roles.edit-form');
+        return view('livewire.roles.edit-form', [
+            'abilities' => $this->abilities
+        ]);
     }
 }

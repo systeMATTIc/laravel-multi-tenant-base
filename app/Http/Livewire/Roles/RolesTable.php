@@ -14,15 +14,15 @@ class RolesTable extends Component
     public int $perPage = 10;
 
     public string $sortField = 'created_at';
-    
+
     public bool $sortAsc = true;
-    
+
     public string $search = '';
 
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
-            $this->sortAsc = ! $this->sortAsc;
+            $this->sortAsc = !$this->sortAsc;
         } else {
             $this->sortAsc = true;
         }
@@ -32,12 +32,10 @@ class RolesTable extends Component
 
     public function render()
     {
-        $roles = Role::search($this->search)
-            ->where(['scope' => tenant()->id])
+        $roles = Role::search($this->search, tenant()->id)
             ->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc')
-            ->paginate($this->perPage)
-        ;
-        
+            ->paginate($this->perPage);
+
         return view('livewire.roles.roles-table', [
             'roles' => $roles
         ]);
