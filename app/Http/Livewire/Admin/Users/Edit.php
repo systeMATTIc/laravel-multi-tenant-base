@@ -13,7 +13,7 @@ use Silber\Bouncer\Bouncer;
 class Edit extends Component
 {
     use AuthorizesRequests;
-    
+
     /** @var string */
     public $firstName = '';
 
@@ -29,8 +29,8 @@ class Edit extends Component
     /** @var bool */
     public $superadmin = false;
 
-    /** @var Administrator */
-    public $administrator = null;
+    /** @var string */
+    public $administratorUuid;
 
     public ?array $selectedRoles;
 
@@ -38,8 +38,8 @@ class Edit extends Component
 
     public function mount(Administrator $administrator)
     {
-        $this->administrator = $administrator;
-        
+        $this->administratorUuid = $administrator->uuid;
+
         $this->firstName = $administrator->first_name;
         $this->lastName = $administrator->last_name;
         $this->email = $administrator->email;
@@ -64,8 +64,8 @@ class Edit extends Component
                 'first_name' => 'required|min:3',
                 'last_name' => 'required|min:3',
                 'email' => [
-                    'required', 
-                    'email', 
+                    'required',
+                    'email',
                     Rule::unique(
                         'administrators'
                     )->ignoreModel(
@@ -77,13 +77,12 @@ class Edit extends Component
                 'roles' => 'required|array|min:1'
             ]
         )->validate();
-        
-        $administrator = empty($validAdmin['password']) 
+
+        $administrator = empty($validAdmin['password'])
             ? array_filter($validAdmin)
             : array_merge($validAdmin, [
                 'password' => Hash::make($validAdmin['password'])
-            ])
-        ;
+            ]);
 
         $this->administrator->update($administrator);
 
@@ -94,9 +93,21 @@ class Edit extends Component
         return redirect()->route('admin.users.index');
     }
 
+    public function getAdministratorProperty()
+    {
+        return Administrator::query()->whereUuid(
+            $this->administratorUuid
+        )->first();
+    }
+
     public function render()
     {
-        $availableRoles = app(Bouncer::class)->role()->all();
+        /** @var Bouncer */
+        $bouncer = app(Bouncer::class);
+
+        $availableRoles = $bouncer->role()->query()->where([
+            'scope' => null
+        ])->get();
 
         return view('livewire.admin.users.edit', [
             'roles' => $availableRoles,

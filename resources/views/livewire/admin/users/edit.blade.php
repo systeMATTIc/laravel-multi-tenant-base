@@ -106,6 +106,9 @@
     <script>
         $(document).ready(function() {
             $('.select2').select2();
+
+            @this.set('selectedRoles', $('.select2').val());
+
             $('.select2').on('change', function (e) {
                 let currentValue = $(this).val();
                 currentValue.push(e.target.value);

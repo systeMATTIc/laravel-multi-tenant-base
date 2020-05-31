@@ -48,7 +48,7 @@ class CreateTenantAdminRoleAndAssignToUser
                 'name' => 'admin',
                 'scope' => $tenant->id
             ]);
-            
+
             $role->allow($abilities);
 
             return $role;
@@ -57,7 +57,9 @@ class CreateTenantAdminRoleAndAssignToUser
 
     private function createTenantAbilities($tenant)
     {
-        $abilities = config('abilities');
+        $abilities = collect(config('abilities'))->flatten(2)->filter(function ($entry) {
+            return is_array($entry);
+        });
 
         return $this->bouncer->scope()->onceTo($tenant->id, function () use ($tenant, $abilities) {
             return collect($abilities)->map(function ($ability) use ($tenant) {

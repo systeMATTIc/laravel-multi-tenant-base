@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Illuminate\Support\Str;
 
 /**
  * 
@@ -21,7 +22,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name','email', 'password', 'tenant_id', 'settings', 'is_super'
+        'first_name', 'last_name', 'email',
+        'password', 'tenant_id', 'settings',
+        'is_super', 'uuid'
     ];
 
     /**
@@ -42,6 +45,27 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (self $user) {
+            $user->uuid = Str::uuid();
+            $user->save();
+            return $user;
+        });
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     public function getNameAttribute()
     {
         return "$this->first_name $this->last_name";
@@ -52,7 +76,6 @@ class User extends Authenticatable
         return empty($query) ? static::query() : static::query()
             ->where('first_name', 'like', "%$query%")
             ->orWhere('last_name', 'like', "%$query%")
-            ->orWhere('email', 'like', "%$query%")
-        ;
+            ->orWhere('email', 'like', "%$query%");
     }
 }
