@@ -2,33 +2,32 @@
 
 namespace App\Http\Livewire\Roles;
 
+use App\Http\Livewire\MapsAbilitiesForRoleEdit;
 use App\Tenant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Silber\Bouncer\Bouncer;
-use Silber\Bouncer\Database\Role;
 
 class EditForm extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, MapsAbilitiesForRoleEdit;
 
     public $title;
 
     public $name;
 
-    public $selectedAbilities;
-
     public $roleId;
+
+    public $mappedAbilities;
 
     public function mount($id)
     {
         $this->roleId = $id;
         $this->title = $this->role->title;
         $this->name = $this->role->name;
-        $this->selectedAbilities = $this->role->getAbilities()->pluck('id')->toArray();
+        $this->mappedAbilities = $this->getMappedAbililites();
     }
 
     public function submit()
@@ -39,27 +38,28 @@ class EditForm extends Component
             [
                 'title' => $this->title,
                 'name' => $this->name,
-                'abilities' => $this->selectedAbilities
             ],
             [
                 'title' => ['required', 'min:3', Tenant::uniqueRule('roles', 'title', 'scope')->ignoreModel($this->role)],
                 'name' => ['required', 'min:3', Tenant::uniqueRule('roles', 'name', 'scope')->ignoreModel($this->role)],
-                'abilities' => 'required|array|min:1'
             ]
         )->validate();
 
-        $abilities = collect($this->abilities)->filter(function ($ability) use ($validRole) {
-            return in_array($ability->id, $validRole['abilities']);
+        $selectedAbilites = $this->getAllowedAbilitiesFrom($this->mappedAbilities);
+
+        $abilities = collect($this->abilities)->filter(function ($ability) use ($selectedAbilites) {
+            return in_array($ability->name, $selectedAbilites);
         });
 
-        $this->role->update(['title' => $this->title, 'name' => $this->name]);
+
+        $this->role->update(['title' => $validRole['title'], 'name' => $validRole['name']]);
 
         /** @var \Silber\Bouncer\Bouncer */
         $bouncer = app(Bouncer::class);
 
         $bouncer->scope()->onceTo(tenant()->id, function () use ($abilities) {
             $this->role->abilities()->detach();
-            $this->role->allow($abilities);
+            $this->role->allow($abilities->values());
         });
 
         return redirect()->route('roles.index');
@@ -94,5 +94,10 @@ class EditForm extends Component
         return view('livewire.roles.edit-form', [
             'abilities' => $this->abilities
         ]);
+    }
+
+    protected function getConfig()
+    {
+        return config('abilities');
     }
 }

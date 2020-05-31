@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Roles;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Http\Livewire\MapsAbilitiesForRoleCreation;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -11,13 +11,18 @@ use Silber\Bouncer\Bouncer;
 
 class CreateForm extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, MapsAbilitiesForRoleCreation;
 
     public $title;
 
     public $name;
 
-    public $selectedAbilities;
+    public $mappedAbilities;
+
+    public function mount()
+    {
+        $this->mappedAbilities = $this->getMappedAbililites();
+    }
 
     public function submit(Bouncer $bouncer)
     {
@@ -27,24 +32,24 @@ class CreateForm extends Component
             [
                 'title' => $this->title,
                 'name' => $this->name,
-                'abilities' => $this->selectedAbilities
             ],
             [
                 'title' => ['required', 'min:3', Rule::unique('roles')->whereNull('scope')],
                 'name' => ['required', 'min:3', Rule::unique('roles')->whereNull('scope')],
-                'abilities' => 'required|array|min:1'
             ]
         )->validate();
 
+        $selectedAbilites = $this->getAllowedAbilitiesFrom($this->mappedAbilities);
+
+        $abilities = collect($this->abilities)->filter(function ($ability) use ($selectedAbilites) {
+            return in_array($ability->name, $selectedAbilites);
+        });
+
         /** @var \Silber\Bouncer\Database\Role */
         $role = $bouncer->role()->query()->create([
-            'title' => $this->title,
-            'name' => $this->name
+            'title' => $validRole['title'],
+            'name' => $validRole['name'],
         ]);
-
-        $abilities = collect($this->abilities)->filter(function ($ability) use ($validRole) {
-            return in_array($ability->id, $validRole['abilities']);
-        });
 
         $role->allow($abilities);
 
@@ -66,5 +71,10 @@ class CreateForm extends Component
         return view('livewire.admin.roles.create-form', [
             'abilities' => $this->abilities
         ]);
+    }
+
+    protected function getConfig()
+    {
+        return config('admin.abilities');
     }
 }

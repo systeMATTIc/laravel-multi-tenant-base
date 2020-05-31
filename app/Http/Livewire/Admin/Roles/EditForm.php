@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Roles;
 
+use App\Http\Livewire\MapsAbilitiesForRoleEdit;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -11,13 +12,13 @@ use App\Role;
 
 class EditForm extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, MapsAbilitiesForRoleEdit;
 
     public $title;
 
     public $name;
 
-    public $selectedAbilities;
+    public $mappedAbilities;
 
     public $roleId;
 
@@ -26,7 +27,7 @@ class EditForm extends Component
         $this->roleId = $id;
         $this->title = $this->role->title;
         $this->name = $this->role->name;
-        $this->selectedAbilities = $this->role->getAbilities()->pluck('id')->toArray();
+        $this->mappedAbilities = $this->getMappedAbililites();
     }
 
     public function submit()
@@ -37,20 +38,20 @@ class EditForm extends Component
             [
                 'title' => $this->title,
                 'name' => $this->name,
-                'abilities' => $this->selectedAbilities
             ],
             [
                 'title' => ['required', 'min:3', Rule::unique('roles')->whereNull('scope')->ignoreModel($this->role)],
                 'name' => ['required', 'min:3', Rule::unique('roles')->whereNull('scope')->ignoreModel($this->role)],
-                'abilities' => 'required|array|min:1'
             ]
         )->validate();
 
-        $abilities = collect($this->abilities)->filter(function ($ability) use ($validRole) {
-            return in_array($ability->id, $validRole['abilities']);
+        $selectedAbilites = $this->getAllowedAbilitiesFrom($this->mappedAbilities);
+
+        $abilities = collect($this->abilities)->filter(function ($ability) use ($selectedAbilites) {
+            return in_array($ability->name, $selectedAbilites);
         });
 
-        $this->role->update(['title' => $this->title, 'name' => $this->name]);
+        $this->role->update(['title' => $validRole['title'], 'name' => $validRole['name']]);
 
         $this->role->abilities()->detach();
 
@@ -84,5 +85,10 @@ class EditForm extends Component
         return view('livewire.admin.roles.edit-form', [
             'abilities' => $this->abilities
         ]);
+    }
+
+    protected function getConfig()
+    {
+        return config('admin.abilities');
     }
 }

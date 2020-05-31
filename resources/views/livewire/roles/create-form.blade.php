@@ -10,9 +10,26 @@ Roles
 </div>
 @endsection
 
-<div class="w-full p-6 sm:p-10 bg-white shadow">
+<div class="w-full p-6 sm:p-10 bg-white shadow" x-data="{ tab: 'role' }">
+    <ul class=" flex border-b">
+        <li class="-mb-px mr-1" @click="tab = 'role'">
+            <a class="bg-white inline-block text-gray-400 hover:text-indigo-500 py-2 px-4"
+                :class="{ 'border-l border-t border-r rounded-t text-indigo-600 font-semibold': tab == 'role' }"
+                href="#">
+                Role
+            </a>
+        </li>
+        <li class="mr-1" :class="{ '-mb-px': tab == 'abilities' }" @click="tab = 'abilities'">
+            <a class="bg-white inline-block py-2 px-4 text-gray-400 hover:text-indigo-500"
+                :class="{ 'border-l border-t border-r border-b-0 rounded-t text-indigo-600 font-semibold': tab == 'abilities' }"
+                href="#">
+                Abilities
+            </a>
+        </li>
+    </ul>
+
     <form wire:submit.prevent="submit" class="w-full">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4 mt-10" x-show="tab == 'role'">
             <div class="sm:w-1/2 sm:mx-4">
                 <label for="title" class="block text-sm font-medium text-gray-700 leading-5">
                     Title
@@ -44,28 +61,8 @@ Roles
             </div>
         </div>
 
-        <div class="flex flex-col mt-4  overflow-x-hidden">
-            <div class="">
-                <label for="selectedAbilities" class="block text-sm font-medium text-gray-700 leading-5">
-                    Abilities
-                </label>
-
-                <div wire:ignore class="mt-1 rounded-md shadow-sm">
-                    <select
-                        class="select2 w-full @error('selectedAbilities') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror"
-                        multiple required>
-                        @foreach($abilities as $ability)
-                        <option value="{{ $ability->id }}">
-                            {{ $ability->title }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                @error('selectedAbilities')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+        <div class="flex flex-col mt-10  overflow-x-hidden" x-show="tab == 'abilities'">
+            <x-app-abilities :abilities="$mappedAbilities" abilities-key="mappedAbilities" />
         </div>
 
         <div class="flex items-center justify-end mt-6 w-full">
@@ -74,26 +71,5 @@ Roles
                 Create
             </button>
         </div>
-
     </form>
 </div>
-
-@push('styles')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-@endpush
-
-@push('scripts')
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function() {
-            $('.select2').select2();
-            $('.select2').on('change', function (e) {
-                let currentValue = $(this).val();
-                currentValue.push(e.target.value);
-                @this.set('selectedAbilities', currentValue);
-            });
-        });
-</script>
-@endpush

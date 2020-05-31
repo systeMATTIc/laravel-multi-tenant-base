@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Roles;
 
+use App\Http\Livewire\MapsAbilitiesForRoleCreation;
 use App\Tenant;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
@@ -10,13 +11,18 @@ use Silber\Bouncer\Bouncer;
 
 class CreateForm extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, MapsAbilitiesForRoleCreation;
 
     public $title;
 
     public $name;
 
-    public $selectedAbilities;
+    public $mappedAbilities;
+
+    public function mount()
+    {
+        $this->mappedAbilities = $this->getMappedAbililites();
+    }
 
     public function submit(Bouncer $bouncer)
     {
@@ -26,24 +32,24 @@ class CreateForm extends Component
             [
                 'title' => $this->title,
                 'name' => $this->name,
-                'abilities' => $this->selectedAbilities
             ],
             [
                 'title' => ['required', 'min:3', Tenant::uniqueRule('roles', 'title', 'scope')],
                 'name' => ['required', 'min:3', Tenant::uniqueRule('roles', 'name', 'scope')],
-                'abilities' => 'required|array|min:1'
             ]
         )->validate();
 
-        $abilities = collect($this->abilities)->filter(function ($ability) use ($validRole) {
-            return in_array($ability->id, $validRole['abilities']);
+        $selectedAbilites = $this->getAllowedAbilitiesFrom($this->mappedAbilities);
+
+        $abilities = collect($this->abilities)->filter(function ($ability) use ($selectedAbilites) {
+            return in_array($ability->name, $selectedAbilites);
         });
-        // dd($abilities);
-        $bouncer->scope()->onceTo(tenant()->id, function () use ($bouncer, $abilities) {
+
+        $bouncer->scope()->onceTo(tenant()->id, function () use ($bouncer, $abilities, $validRole) {
             /** @var \Silber\Bouncer\Database\Role */
             $role = $bouncer->role()->query()->create([
-                'title' => $this->title,
-                'name' => $this->name,
+                'title' => $validRole['title'],
+                'name' => $validRole['name'],
                 'scope' => tenant()->id
             ]);
 
@@ -66,7 +72,12 @@ class CreateForm extends Component
     public function render()
     {
         return view('livewire.roles.create-form', [
-            'abilities' => $this->abilities
+            'abilities' => $this->abilities,
         ]);
+    }
+
+    protected function getConfig()
+    {
+        return config('abilities');
     }
 }
