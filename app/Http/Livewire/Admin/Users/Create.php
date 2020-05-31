@@ -13,7 +13,7 @@ use Silber\Bouncer\Bouncer;
 class Create extends Component
 {
     use AuthorizesRequests;
-    
+
     /** @var string */
     public $firstName = '';
 
@@ -54,6 +54,8 @@ class Create extends Component
             ]
         )->validate();
 
+        $this->dispatchBrowserEvent('submitting');
+
         /** @var Administrator */
         $admin = Administrator::query()->create([
             'first_name' => $validAdmin['first_name'],
@@ -62,9 +64,9 @@ class Create extends Component
             'password' => Hash::make($validAdmin['password']),
             'is_super' => $validAdmin['is_super'],
         ]);
-        
+
         $admin->assign($validAdmin['roles']);
-        
+
         event(new Registered($admin));
 
         return redirect()->route('admin.users.index');

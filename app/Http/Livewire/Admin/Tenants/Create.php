@@ -26,10 +26,10 @@ class Create extends Component
 
     /** @var string */
     public $firstName;
-    
+
     /** @var string */
     public $lastName;
-    
+
     /** @var string */
     public $email;
 
@@ -46,13 +46,15 @@ class Create extends Component
                 'admin_email' => $this->email,
             ],
             [
-                'name' => 'required|unique:tenants|min:3', 
+                'name' => 'required|unique:tenants|min:3',
                 'domain' => 'required|unique:tenants|min:3',
                 'admin_first_name' => 'required|min:3',
                 'admin_last_name' => 'required|min:3',
                 'admin_email' => 'required|email',
             ],
         )->validate();
+
+        $this->dispatchBrowserEvent('submitting');
 
         $tenant = Tenant::query()->create([
             'name' => $validTenant['name'],
@@ -103,5 +105,4 @@ class Create extends Component
             return strtolower($this->domain . '.' . env('PROD_APP_BASE_URL'));
         }
     }
-
 }
