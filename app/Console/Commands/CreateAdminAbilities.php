@@ -40,9 +40,11 @@ class CreateAdminAbilities extends Command
     {
         $this->info("Preparing abilities...");
 
-        $abilities = config('admin.abilities');
+        $abilities = collect(config('admin.abilities'))->flatten(2)->filter(function ($entry) {
+            return is_array($entry);
+        });
 
-        collect($abilities)->each(function ($ability) use ($bouncer) {
+        collect($abilities->values())->each(function ($ability) use ($bouncer) {
             $bouncer->ability()->query()->firstOrCreate($ability);
         });
 

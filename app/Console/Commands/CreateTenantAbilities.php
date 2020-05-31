@@ -41,11 +41,13 @@ class CreateTenantAbilities extends Command
     {
         $this->info("Preparing abilities...");
 
-        $abilities = config('abilities');
+        $abilities = collect(config('abilities'))->flatten(2)->filter(function ($entry) {
+            return is_array($entry);
+        });
 
         Tenant::all()->each(function ($tenant) use ($bouncer, $abilities) {
             $bouncer->scope()->onceTo($tenant->id, function () use ($tenant, $abilities, $bouncer) {
-                collect($abilities)->each(function ($ability) use ($tenant, $bouncer) {
+                collect($abilities->values())->each(function ($ability) use ($tenant, $bouncer) {
                     $ability = array_merge($ability, ['scope' => $tenant->id]);
                     $bouncer->ability()->query()->firstOrCreate($ability);
                 });
