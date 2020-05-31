@@ -14,7 +14,7 @@ use Silber\Bouncer\Bouncer;
 class Create extends Component
 {
     use AuthorizesRequests;
-    
+
     /** @var string */
     public $firstName = '';
 
@@ -63,16 +63,14 @@ class Create extends Component
             'password' => Hash::make($validAdmin['password']),
             'is_super' => $validAdmin['is_super'],
         ]);
-        
+
         /** @var \Silber\Bouncer\Bouncer */
         $bouncer = app(Bouncer::class);
 
-        $bouncer->scope()->onceTo(tenant()->id, function () use ($admin, $validAdmin) {
-            $admin->assign($validAdmin['roles']);
+        $bouncer->scope()->onceTo(tenant()->id, function () use ($admin, $validAdmin, $bouncer) {
+            $bouncer->assign($validAdmin['roles'])->to($admin);
         });
 
-        // $admin->assign($validAdmin['roles']);
-        
         event(new Registered($admin));
 
         return redirect()->route('users.index');
@@ -86,7 +84,7 @@ class Create extends Component
         $availableRoles = $bouncer->role()->query()->where([
             'scope' => tenant()->id
         ])->get();
-        
+
         return view('livewire.users.create', [
             'roles' => $availableRoles
         ]);

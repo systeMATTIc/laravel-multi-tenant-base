@@ -15,7 +15,7 @@ use Silber\Bouncer\Bouncer;
 class Edit extends Component
 {
     use AuthorizesRequests;
-    
+
     /** @var string */
     public $firstName = '';
 
@@ -79,13 +79,12 @@ class Edit extends Component
                 'roles' => 'required|array|min:1'
             ]
         )->validate();
-                        
-        $user = empty($validUser['password']) 
+
+        $user = empty($validUser['password'])
             ? array_filter($validUser)
             : array_merge($validUser, [
                 'password' => Hash::make($validUser['password']),
-            ])
-        ;
+            ]);
 
         $user = array_merge($user, ['is_super' => $this->superadmin]);
 
@@ -94,9 +93,9 @@ class Edit extends Component
         /** @var \Silber\Bouncer\Bouncer */
         $bouncer = app(Bouncer::class);
 
-        $bouncer->scope()->onceTo(tenant()->id, function () use ($validUser) {
+        $bouncer->scope()->onceTo(tenant()->id, function () use ($validUser, $bouncer) {
             $this->user->roles()->detach();
-            $this->user->assign($validUser['roles']);
+            $bouncer->assign($validUser['roles'])->to($this->user);
         });
 
         return redirect()->route('users.index');
