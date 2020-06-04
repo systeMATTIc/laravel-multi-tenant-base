@@ -34,27 +34,40 @@ Route::middleware('auth')->group(function () {
 
     Route::view('password/confirm', 'auth.passwords.confirm')->name('password.confirm');
 
-    Route::resource('users', 'UsersController')->except(['store', 'update']);
+    // Users
+    Route::livewire('users', 'users.users-list')
+        ->layout('layouts.app')
+        ->name('users.index')
+        ->middleware('can:view-users');
 
-    // Route::resource('roles', 'RolesController')->except(['store', 'update']);
-    Route::livewire('roles', 'roles.roles-table')
+    Route::livewire('users/create', 'users.create-user')
+        ->layout('layouts.app')
+        ->name('users.create')
+        ->middleware('can:create-user');
+
+    Route::livewire('users/{uuid}/edit', 'users.edit-user')
+        ->layout('layouts.app')
+        ->name('users.edit')
+        ->middleware('can:edit-user');
+
+    // Roles
+    Route::livewire('roles', 'roles.roles-list')
         ->layout('layouts.app')
         ->name('roles.index')
         ->middleware('can:view-roles');
 
-    Route::livewire('roles/{id}/edit', 'roles.edit-form')
+    Route::livewire('roles/{id}/edit', 'roles.edit-role')
         ->layout('layouts.app')
         ->name('roles.edit')
         ->middleware('can:edit-role');
 
-    Route::livewire('roles/create', 'roles.create-form')
+    Route::livewire('roles/create', 'roles.create-role')
         ->layout('layouts.app')
         ->name('roles.create')
         ->middleware('can:create-role');
 
-    Route::delete('roles/{id}', 'RolesController@destroy')
-        ->name('roles.delete')
-        ->middleware('can:delete-role');
-
-    Route::livewire('profile', 'profile')->layout('layouts.app')->name('profile');
+    // Profile
+    Route::livewire('profile', 'profile')
+        ->layout('layouts.app')
+        ->name('profile');
 });
