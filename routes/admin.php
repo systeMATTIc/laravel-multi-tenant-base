@@ -32,31 +32,58 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::view('password/confirm', 'admin.auth.passwords.confirm')->name('password.confirm');
 
-    Route::resource('tenants', 'TenantsController')->except(['store', 'update']);
+    // Route::resource('tenants', 'TenantsController')->except(['store', 'update']);
 
-    Route::resource('users', 'AdministratorsController')->except(['store', 'update']);
+    // Tenants
+    Route::livewire('tenants', 'admin.tenants.tenants-list')
+        ->layout('admin.layouts.app')
+        ->name('tenants.index')
+        ->middleware('can:view-tenant-list');
 
-    // Route::resource('roles', 'RolesController')->except(['store', 'update']);
+    Route::livewire('tenants/create', 'admin.tenants.create-tenant')
+        ->layout('admin.layouts.app')
+        ->name('tenants.create')
+        ->middleware('can:create-tenant');
 
-    Route::livewire('roles', 'admin.roles.roles-table')
+    Route::livewire('tenants/{uuid}/edit', 'admin.tenants.edit-tenant')
+        ->layout('admin.layouts.app')
+        ->name('tenants.edit')
+        ->middleware('can:edit-tenant');
+
+    // Administrators
+    Route::livewire('users', 'admin.users.users-list')
+        ->layout('admin.layouts.app')
+        ->name('users.index')
+        ->middleware('can:view-administrator-list');
+
+    Route::livewire('users/create', 'admin.users.create-user')
+        ->layout('admin.layouts.app')
+        ->name('users.create')
+        ->middleware('can:create-administrator');
+
+    Route::livewire('users/{uuid}/edit', 'admin.users.edit-user')
+        ->layout('admin.layouts.app')
+        ->name('users.edit')
+        ->middleware('can:edit-administrator');
+
+    // Roles
+    Route::livewire('roles', 'admin.roles.roles-list')
         ->layout('admin.layouts.app')
         ->name('roles.index')
         ->middleware('can:view-roles');
 
-    Route::livewire('roles/{id}/edit', 'admin.roles.edit-form')
+    Route::livewire('roles/{id}/edit', 'admin.roles.edit-role')
         ->layout('admin.layouts.app')
         ->name('roles.edit')
         ->middleware('can:edit-role');
 
-    Route::livewire('roles/create', 'admin.roles.create-form')
+    Route::livewire('roles/create', 'admin.roles.create-role')
         ->layout('admin.layouts.app')
         ->name('roles.create')
         ->middleware('can:create-role');
 
-    Route::delete('roles/{id}', 'RolesController@destroy')
-        ->name('roles.delete')
-        ->middleware('can:delete-role');
-
-
-    Route::livewire('profile', 'admin.profile')->layout('admin.layouts.app')->name('profile');
+    // Profile
+    Route::livewire('profile', 'admin.profile')
+        ->layout('admin.layouts.app')
+        ->name('profile');
 });
