@@ -75,7 +75,5 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        // 'not.tenant' => \App\Http\Middleware\RedirectTenantFromAdmin::class
-        // 'tenant' => \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
     ];
 }

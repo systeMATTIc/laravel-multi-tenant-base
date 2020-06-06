@@ -1,17 +1,16 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Administrator;
 use App\Events\TenantWasCreated;
-use App\Http\Livewire\Admin\Tenants\Create;
+use App\Http\Livewire\Admin\Tenants\CreateTenant;
 use App\Notifications\TenantCreated;
 use App\Role;
 use App\Tenant;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -19,16 +18,16 @@ use Tests\TestCase;
 class CreateTenantTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function testItCreatesTenant()
     {
         $admin = factory(Administrator::class)->create();
-
+        $admin->allow(['create-tenant', 'view-tenant-list']);
         $this->actingAs($admin, 'admin');
-        
+
         $adminBasePrefix = config('admin.base.route_prefix');
 
-        Livewire::test(Create::class)
+        Livewire::test(CreateTenant::class)
             ->set('name', 'just')
             ->set('domain', 'just.localhost')
             ->set('isFullDomain', true)
@@ -48,10 +47,10 @@ class CreateTenantTest extends TestCase
         Event::fake();
 
         $admin = factory(Administrator::class)->create();
-
+        $admin->allow(['create-tenant', 'view-tenant-list']);
         $this->actingAs($admin, 'admin');
 
-        Livewire::test(Create::class)
+        Livewire::test(CreateTenant::class)
             ->set('name', 'just')
             ->set('domain', 'just.localhost')
             ->set('isFullDomain', true)
@@ -73,9 +72,10 @@ class CreateTenantTest extends TestCase
     public function testItAssignsAdminRoleToTenantAdmin()
     {
         $admin = factory(Administrator::class)->create();
+        $admin->allow(['create-tenant', 'view-tenant-list']);
         $this->actingAs($admin, 'admin');
 
-        Livewire::test(Create::class)
+        Livewire::test(CreateTenant::class)
             ->set('name', 'just')
             ->set('domain', 'just.localhost')
             ->set('isFullDomain', true)
@@ -99,9 +99,10 @@ class CreateTenantTest extends TestCase
     public function testItVerifiesTenantAdmin()
     {
         $admin = factory(Administrator::class)->create();
+        $admin->allow(['create-tenant', 'view-tenant-list']);
         $this->actingAs($admin, 'admin');
 
-        Livewire::test(Create::class)
+        Livewire::test(CreateTenant::class)
             ->set('name', 'just')
             ->set('domain', 'just.localhost')
             ->set('isFullDomain', true)
@@ -119,7 +120,11 @@ class CreateTenantTest extends TestCase
     {
         Notification::fake();
 
-        Livewire::test(Create::class)
+        $admin = factory(Administrator::class)->create();
+        $admin->allow(['create-tenant', 'view-tenant-list']);
+        $this->actingAs($admin, 'admin');
+
+        Livewire::test(CreateTenant::class)
             ->set('name', 'just')
             ->set('domain', 'just.localhost')
             ->set('isFullDomain', true)
@@ -129,7 +134,7 @@ class CreateTenantTest extends TestCase
             ->call('submit');
 
         $tenantAdmin = User::whereFirstName('Opeyemi')->first();
-        
+
         Notification::assertSentTo($tenantAdmin, TenantCreated::class);
     }
 }
