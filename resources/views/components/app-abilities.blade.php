@@ -21,12 +21,12 @@
         </article>
         <article wire:ignore.self class="border-b" x-show="tab == '{{ $mappedAbility['subject'] }}'">
             <div class="border-l-2 border-r-2 bg-grey-lightest border-indigo-600">
-                <div>
-                    <div class="pl-8 pr-8 pb-5 text-grey-darkest">
+                <div class="overflow-x-auto relative">
+                    <div class="pl-8 pr-8 pb-5 text-grey-darkest inline-block min-w-full">
                         <ul class="pl-4">
                             @foreach ($mappedAbility['abilities'] as $configKey => $abilityConfig)
                             <li class="py-5 w-full border-b last:border-0 flex justify-between">
-                                <p>{{ $abilityConfig['title'] }}</p>
+                                <p class="mr-12 sm:mr-0">{{ $abilityConfig['title'] }}</p>
                                 <div class="flex">
                                     <label class="inline-flex items-center mr-12 cursor-pointer" @click.stop>
                                         <input @click.stop
