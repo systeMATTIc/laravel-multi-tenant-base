@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        @hasSection('title')
-            <title>@yield('title') - {{ config('app.name') }}</title>
-        @else
-            <title>{{ config('app.name') }}</title>
-        @endif
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    @hasSection('title')
+    <title>@yield('title') - {{ config('app.name') }}</title>
+    @else
+    <title>{{ config('app.name') }}</title>
+    @endif
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        @stack('styles')
-        @livewireStyles
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
-        <!-- CSRF Token -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-    </head>
+    <!-- Styles -->
+    <style>
+        [x-cloak] {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    @stack('styles')
+    @livewireStyles
 
-    <body>
-        @yield('body')
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
 
-        <script src="{{ mix('js/app.js') }}"></script>
-        @livewireScripts
-        @stack('scripts')
-    </body>
+<body>
+    @yield('body')
+
+    <script src="{{ mix('js/app.js') }}"></script>
+    @livewireScripts
+    @stack('scripts')
+</body>
+
 </html>

@@ -62,7 +62,7 @@ Roles
                             <td class="px-4 py-4">{{ $role->created_at->toDayDateTimeString() }}</td>
                             <td class="px-4 py-4">{{ $role->updated_at->toDayDateTimeString() }}</td>
                             <td>
-                                <div class="" x-data="{ open: false }">
+                                <div class="" x-data="{ open: false }" x-cloak>
                                     <button class="p-2 text-gray-400 text-lg hover:bg-indigo-100 focus:outline-none"
                                         @click="open = true">
                                         <svg class="fill-current h-5" xmlns="http://www.w3.org/2000/svg"
