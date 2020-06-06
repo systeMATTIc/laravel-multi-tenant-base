@@ -32,8 +32,6 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::view('password/confirm', 'admin.auth.passwords.confirm')->name('password.confirm');
 
-    // Route::resource('tenants', 'TenantsController')->except(['store', 'update']);
-
     // Tenants
     Route::livewire('tenants', 'admin.tenants.tenants-list')
         ->layout('admin.layouts.app')
