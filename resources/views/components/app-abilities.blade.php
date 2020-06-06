@@ -1,4 +1,4 @@
-<div class="w-full" x-data="{ tab: '' }">
+<div class="w-full" x-data="{ tab: '' }" x-cloak>
     @foreach ($abilities as $key => $mappedAbility)
     <section class="shadow">
         <article class="border">

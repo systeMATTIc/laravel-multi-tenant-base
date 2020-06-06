@@ -1,4 +1,5 @@
-<div class="bg-white flex lg:flex-row flex-col lg:justify-center lg:items-center shadow" x-data="{ open: false }">
+<div class="bg-white flex lg:flex-row flex-col lg:justify-center lg:items-center shadow" x-data="{ open: false }"
+  x-cloak>
 
   <div class="w-full mx-auto flex justify-between items-center border-b border-indigo-100 lg:border-none">
 
