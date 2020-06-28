@@ -16,7 +16,7 @@ class InstallBaseApplication extends Command
      *
      * @var string
      */
-    protected $signature = 'base:install';
+    protected $signature = 'install';
 
     /**
      * The console command description.
@@ -65,14 +65,13 @@ class InstallBaseApplication extends Command
         ])->first();
 
         if (is_null($adminRole)) {
-            
+
             /** @var \Silber\Bouncer\Database\Role */
             $role = $bouncer->role()->query()->create([
                 'title' => 'Administrator',
                 'name' => 'admin'
             ]);
-        } 
-        else {
+        } else {
             $role = $adminRole;
         }
 
@@ -80,7 +79,7 @@ class InstallBaseApplication extends Command
         $role->allow($abilities);
 
         $this->info("Admin Role Created Successfully... \n \n");
-        
+
         $this->info("Now, let's create yout first login account. \n");
 
         $firstName = $this->ask("Enter First Name", 'Opeyemi');
