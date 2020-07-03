@@ -21,8 +21,8 @@ class CreateTenant extends Component
     /** @var string */
     public $domain = '';
 
-    /** @var bool */
-    public $isFullDomain = false;
+    /** @var string */
+    public $phoneNo;
 
     /** @var string */
     public $firstName;
@@ -41,6 +41,7 @@ class CreateTenant extends Component
             [
                 'name' => $this->name,
                 'domain' => $this->getDomain(),
+                'phone_no' => $this->phoneNo,
                 'admin_first_name' => $this->firstName,
                 'admin_last_name' => $this->lastName,
                 'admin_email' => $this->email,
@@ -48,6 +49,7 @@ class CreateTenant extends Component
             [
                 'name' => 'required|unique:tenants|min:3',
                 'domain' => 'required|unique:tenants|min:3',
+                'phone_no' => 'required|size:11|phone:NG,mobile|unique:tenants', // may have to account for different countries in the future
                 'admin_first_name' => 'required|min:3',
                 'admin_last_name' => 'required|min:3',
                 'admin_email' => 'required|email',
@@ -89,20 +91,21 @@ class CreateTenant extends Component
             return null;
         }
 
-        if ($this->isFullDomain) {
+        $suffix = env('TENANT_SUBDOMAIN_SUFFIX');
+        $baseUrl = env('BASE_URL');
+
+        if (Str::contains($this->domain, ["-" . $suffix, $baseUrl])) {
             return strtolower($this->domain);
         }
 
-        if (app()->environment('local')) {
-            return strtolower($this->domain . '.' . env('LOCAL_APP_BASE_URL'));
+        if (!(bool) env('TENANT_SUBDOMAIN')) {
+            return strtolower($this->domain);
         }
 
-        if (app()->environment('staging')) {
-            return strtolower($this->domain . '.' . env('STAGING_APP_BASE_URL'));
+        if (empty($suffix)) {
+            return strtolower($this->domain . '.' . $baseUrl ?? 'localhost');
         }
 
-        if (app()->environment('local')) {
-            return strtolower($this->domain . '.' . env('PROD_APP_BASE_URL'));
-        }
+        return strtolower($this->domain . '-' . $suffix . '.' . $baseUrl ?? 'localhost');
     }
 }
