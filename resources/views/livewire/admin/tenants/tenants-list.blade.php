@@ -14,7 +14,7 @@ Tenants
 </div>
 @endsection
 
-<div class="w-full p-6 sm:p-10 bg-white shadow">
+<div class="w-full p-7 sm:p-9 bg-white rounded shadow-xl">
 	<div class="flex flex-col">
 
 		<div class="sm:w-full sm:flex sm:flex-row flex-col sm:justify-between">
