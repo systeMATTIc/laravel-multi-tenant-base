@@ -15,7 +15,7 @@ Users
 @endsection
 
 
-<div class="w-full sm:p-10 p-6 bg-white shadow">
+<div class="w-full p-7 sm:p-9 bg-white rounded shadow-xl">
 
     <div class="flex flex-col">
 
