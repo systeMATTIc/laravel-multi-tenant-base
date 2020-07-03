@@ -60,7 +60,8 @@ class CreateTenant extends Component
 
         $tenant = Tenant::query()->create([
             'name' => $validTenant['name'],
-            'domain' => $validTenant['domain']
+            'domain' => $validTenant['domain'],
+            'phone_no' => $validTenant['phone_no']
         ]);
 
         $password = Str::random(10);
