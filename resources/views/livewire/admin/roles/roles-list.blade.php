@@ -8,7 +8,7 @@ Roles
         Roles
     </h1>
     <a href="{{ route('admin.roles.create') }}"
-        class="block px-4 py-2 bg-indigo-600 hover:bg-indigo-500 font-semibold text-white shadow rounded-md">Create</a>
+        class="block px-4 py-2 bg-teal-600 hover:bg-teal-500 font-semibold text-white shadow rounded-md">Create</a>
 </div>
 @endsection
 
@@ -63,7 +63,7 @@ Roles
                             <td class="px-4 py-4">{{ $role->updated_at->toDayDateTimeString() }}</td>
                             <td>
                                 <div class="" x-data="{ open: false }" x-cloak>
-                                    <button class="p-2 text-gray-400 text-lg hover:bg-indigo-100 focus:outline-none"
+                                    <button class="p-2 text-gray-400 text-lg hover:bg-teal-100 focus:outline-none"
                                         @click="open = true">
                                         <svg class="fill-current h-5" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 20 20">
@@ -82,13 +82,13 @@ Roles
                                         @click.away="open = false">
                                         @if(auth('admin')->user()->can('edit-role'))
                                         <a href="{{ route('admin.roles.edit', $role->id) }}"
-                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-indigo-50">
+                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-teal-50">
                                             Edit
                                         </a>
                                         @endif
                                         @if(auth('admin')->user()->can('delete-role'))
                                         <a href="#" wire:click="delete('{{ encrypt($role->id) }}')"
-                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-indigo-50">
+                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-teal-50">
                                             Delete
                                         </a>
                                         @endif

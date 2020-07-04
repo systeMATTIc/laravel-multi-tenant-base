@@ -9,7 +9,7 @@ Administrators
     </h1>
     @can('create-administrator')
     <a href="{{ route('admin.users.create') }}"
-        class="block px-4 py-2 bg-indigo-600 hover:bg-indigo-500 font-semibold text-white shadow rounded-md">Create</a>
+        class="block px-4 py-2 bg-teal-600 hover:bg-teal-500 font-semibold text-white shadow rounded-md">Create</a>
     @endcan
 </div>
 @endsection
@@ -71,7 +71,7 @@ Administrators
                             <td class="px-4 py-4">{{ $administrator->updated_at->toDayDateTimeString() }}</td>
                             <td>
                                 <div class="" x-data="{ open: false }">
-                                    <button class="p-2 text-gray-400 text-lg hover:bg-indigo-100 focus:outline-none"
+                                    <button class="p-2 text-gray-400 text-lg hover:bg-teal-100 focus:outline-none"
                                         @click="open = true">
                                         <svg class="fill-current h-5" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 20 20">
@@ -90,13 +90,13 @@ Administrators
                                         @click.away="open = false">
                                         @if(auth('admin')->user()->can('edit-administrator'))
                                         <a href="{{ route('admin.users.edit', $administrator->uuid) }}"
-                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-indigo-50">
+                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-teal-50">
                                             Edit
                                         </a>
                                         @endif
                                         @if(auth('admin')->user()->can('delete-administrator'))
                                         <a href="#" wire:click="delete('{{ $administrator->uuid }}')"
-                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-indigo-50">
+                                            class="py-4 px-6 text-gray-500 cursor-pointer hover:bg-teal-50">
                                             Delete
                                         </a>
                                         @endif

@@ -44,24 +44,24 @@ class RolesList extends Component
             $role = Role::query()->where(['scope' => tenant()->id])->findOrFail(decrypt($id));
 
             if ($user->isA($role)) {
-                $this->dispatchBrowserEvent('deleteEvent', [
-                    'msg' => 'Cannot delete role because it has been assigned to the currently logged in user',
-                    'type' => 'error'
-                ]);
 
-                return;
+                throw new \Exception('Cannot delete role because it has been assigned to the currently logged in user');
             }
 
             $role->delete();
 
             $this->emitSelf('roleDeleted');
 
-            $this->dispatchBrowserEvent('deleteEvent', [
-                'msg' => 'message',
-                'type' => 'success'
+            $this->dispatchBrowserEvent('flash', [
+                'type' => 'success',
+                'message' => "User Deleted Successfully"
             ]);
         } catch (\Throwable $th) {
-            abort(404);
+
+            $this->dispatchBrowserEvent('flash', [
+                'type' => 'error',
+                'message' => $th->getMessage()
+            ]);
         }
     }
 

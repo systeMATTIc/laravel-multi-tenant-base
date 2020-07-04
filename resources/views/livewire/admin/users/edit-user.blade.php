@@ -2,119 +2,85 @@
 Administrators
 @endsection
 
-@section('pageTitle')
-<div class="flex justify-between mb-4">
-    <h1 class="text-gray-500 text-2xl font-semibold">
-        Edit Administrator
-    </h1>
-</div>
-@endsection
+<div class="leading-loose">
+    <form wire:submit.prevent="submit" class="max-w-xl m-4 mx-auto p-7 sm:p-9 bg-white rounded shadow-xl">
+        <p class="text-gray-700 text-2xl">Edit Administrator</p>
+        <div class="mt-6">
+            <label class="block text-sm text-gray-600" for="first_name">First Name</label>
 
-<div class="w-full p-6 sm:p-10 bg-white shadow">
-    <form wire:submit.prevent="submit" class="w-full">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4">
-            <div class="sm:w-1/2 sm:mx-4">
-                <label for="first_name" class="block text-sm font-medium text-gray-700 leading-5">
-                    First Name
-                </label>
+            <input wire:model.lazy="firstName" id="first_name" type="text" required autofocus
+                class="w-full px-5 py-2 text-gray-600 bg-gray-100 border border-transparent rounded focus:border-gray-200 focus:outline-none focus:bg-white">
 
-                <div class="mt-1 rounded-md shadow-sm">
-                    <input wire:model.lazy="firstName" id="first_name" type="text" required autofocus
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('first_name') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" />
-                </div>
-
-                @error('first_name')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="sm:w-1/2 sm:mx-4 mt-4 sm:mt-0">
-                <label for="last_name" class="block text-sm font-medium text-gray-700 leading-5">
-                    Last Name
-                </label>
-
-                <div class="mt-1 rounded-md shadow-sm">
-                    <input wire:model.lazy="lastName" id="last_name" type="text"
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('lastName') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" />
-                </div>
-
-                @error('lastName')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+            @error('firstName')
+            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="flex flex-col sm:flex-row sm:items-center sm:-mx-4 sm:mt-6 mt-4">
-            <div class="sm:w-1/2 sm:mx-4">
-                <label for="email" class="block text-sm font-medium text-gray-700 leading-5">
-                    Email
-                </label>
+        <div class="mt-4">
+            <label class="block text-sm text-gray-600" for="last_name">Last Name</label>
 
-                <div class="mt-1 rounded-md shadow-sm">
-                    <input wire:model.lazy="email" id="email" type="email" required
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('email') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" />
-                </div>
+            <input wire:model.lazy="lastName" id="last_name" type="text"
+                class="w-full px-5 py-2 text-gray-600 bg-gray-100 border border-transparent rounded focus:border-gray-200 focus:outline-none focus:bg-white">
 
-                @error('email')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="sm:w-1/2 sm:mx-4 mt-4 sm:mt-0">
-                <label for="password" class="block text-sm font-medium text-gray-700 leading-5">
-                    Password
-                </label>
-
-                <div class="mt-1 rounded-md shadow-sm">
-                    <input wire:model.lazy="password" id="password" type="password"
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('password') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" />
-                </div>
-
-                @error('password')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+            @error('lastName')
+            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="flex flex-col mt-4  overflow-x-hidden">
-            <div class="">
-                <label for="roles" class="block text-sm font-medium text-gray-700 leading-5">
-                    Roles
-                </label>
+        <div class="mt-4">
+            <label class="block text-sm text-gray-600" for="email">Email Address</label>
 
-                <div wire:ignore class="mt-1 rounded-md shadow-sm">
-                    <select
-                        class="select2 w-full @error('selectedRoles') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror"
-                        multiple required>
-                        @foreach($roles as $role)
-                        <option value="{{ $role->id }}" {{ in_array($role->name, $adminRoles) ? "selected" : "" }}>
-                            {{ $role->title }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
+            <input wire:model.lazy="email" id="email" type="email" required
+                class="w-full px-5 py-2 text-gray-600 bg-gray-100 border border-transparent rounded focus:border-gray-200 focus:outline-none focus:bg-white">
 
-                @error('selectedRoles')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+            @error('email')
+            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-6 -mx-4">
-            <div class="flex items-center mx-4">
+        <div class="mt-4">
+            <label class="block text-sm text-gray-600" for="password">Password</label>
+
+            <input wire:model.lazy="password" id="password" type="password"
+                class="w-full px-5 py-2 text-gray-600 bg-gray-100 border border-transparent rounded focus:border-gray-200 focus:outline-none focus:bg-white">
+
+            @error('password')
+            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mt-4">
+            <label class="block text-sm text-gray-600" for="roles">Roles</label>
+            <div wire:ignore>
+                <select
+                    class="select2 w-full px-5 py-2 text-gray-600 bg-gray-100 border border-transparent rounded focus:border-gray-200 focus:outline-none focus:bg-white"
+                    multiple required>
+                    @foreach($roles as $role)
+                    <option value="{{ $role->id }}" {{ in_array($role->name, $adminRoles) ? "selected" : "" }}>
+                        {{ $role->title }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            @error('selectedRoles')
+            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mt-8 flex justify-between">
+            <div class="flex items-center">
                 <input wire:model.lazy="superadmin" id="superadmin" type="checkbox"
-                    class="form-checkbox w-4 h-4 text-indigo-600 transition duration-150 ease-in-out" />
+                    class="form-checkbox w-4 h-4 text-teal-600 transition duration-150 ease-in-out" />
                 <label for="superadmin" class="block ml-2 text-sm text-gray-900 leading-5">
                     Super Admin
                 </label>
             </div>
 
-            <button type="submit"
-                class="mx-4 flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+            <button class="px-4 py-1 text-white tracking-wider bg-teal-700 hover:bg-teal-500 rounded" type="submit">
                 Update
             </button>
         </div>
-
     </form>
 </div>
 

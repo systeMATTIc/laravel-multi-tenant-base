@@ -10,7 +10,7 @@ Profle
 
     <div @updated-profile.window="alertToShow = $event.detail.name" x-show="alertToShow == 'pwd'"
         @click.away="alertToShow = 'none'"
-        class="p-3 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex"
+        class="p-3 bg-teal-800 items-center text-teal-100 leading-none lg:rounded-full flex lg:inline-flex"
         role="alert">
         <span class="font-semibold mr-2 text-left flex-auto">Password changed successfully</span>
         <svg @click="alertToShow = 'none'" class="fill-current opacity-75 h-4 w-4" role="button"
@@ -23,7 +23,7 @@ Profle
 
     <div @updated-profile.window="alertToShow = $event.detail.name;" x-show="alertToShow == 'data'"
         @click.away="alertToShow = 'none'"
-        class="p-3 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex"
+        class="p-3 bg-teal-800 items-center text-teal-100 leading-none lg:rounded-full flex lg:inline-flex"
         role="alert">
         <span class="font-semibold mr-2 text-left flex-auto">Profile updated successfully</span>
         <svg @click="alertToShow = 'none'" class="fill-current opacity-75 h-4 w-4" role="button"
@@ -41,15 +41,15 @@ Profle
 
     <ul class="flex border-b">
         <li class="-mb-px mr-1" @click="tab = 'edit-profile'">
-            <a class="bg-white inline-block text-gray-400 hover:text-indigo-500 py-2 px-4"
-                :class="{ 'border-l border-t border-r rounded-t text-indigo-600 font-semibold': tab == 'edit-profile' }"
+            <a class="bg-white inline-block text-gray-400 hover:text-teal-500 py-2 px-4"
+                :class="{ 'border-l border-t border-r rounded-t text-teal-600 font-semibold': tab == 'edit-profile' }"
                 href="#">
                 Edit Profile
             </a>
         </li>
         <li class="mr-1" :class="{ '-mb-px': tab == 'change-password' }" @click="tab = 'change-password'">
-            <a class="bg-white inline-block py-2 px-4 text-gray-400 hover:text-indigo-500"
-                :class="{ 'border-l border-t border-r border-b-0 rounded-t text-indigo-600 font-semibold': tab == 'change-password' }"
+            <a class="bg-white inline-block py-2 px-4 text-gray-400 hover:text-teal-500"
+                :class="{ 'border-l border-t border-r border-b-0 rounded-t text-teal-600 font-semibold': tab == 'change-password' }"
                 href="#">
                 Change Password
             </a>
@@ -91,7 +91,7 @@ Profle
 
         <div class="flex items-center justify-end mt-6 w-full">
             <button type="submit"
-                class="flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                class="flex justify-center px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-transparent rounded-md hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal active:bg-teal-700 transition duration-150 ease-in-out">
                 Update
             </button>
         </div>
@@ -129,7 +129,7 @@ Profle
 
         <div class="flex items-center justify-end mt-6 w-full">
             <button type="submit"
-                class="flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                class="flex justify-center px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-transparent rounded-md hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal active:bg-teal-700 transition duration-150 ease-in-out">
                 Change Password
             </button>
         </div>
