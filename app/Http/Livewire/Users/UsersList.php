@@ -39,16 +39,20 @@ class UsersList extends Component
         $user = User::query()->where('uuid', '=', $uuid)->first();
 
         if ($user->is_super) {
-            $this->emitSelf('failedUsereDeletion', [
-                'msg' => 'Cannot Delete a Superadmin'
+
+            $this->dispatchBrowserEvent('flash', [
+                'type' => 'error',
+                'message' => "Cannot Delete a Superadmin"
             ]);
 
             return;
         }
 
         if ($user->is(auth()->user())) {
-            $this->emitSelf('failedUserDeletion', [
-                'msg' => 'Cannot delete the currently logged in user'
+
+            $this->dispatchBrowserEvent('flash', [
+                'type' => 'error',
+                'message' => "Cannot delete the currently logged in user"
             ]);
 
             return;
@@ -57,6 +61,11 @@ class UsersList extends Component
         $user->delete();
 
         $this->emitSelf('userDeleted');
+
+        $this->dispatchBrowserEvent('flash', [
+            'type' => 'success',
+            'message' => "User Deleted Successfully"
+        ]);
     }
 
     public function render()

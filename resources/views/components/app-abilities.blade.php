@@ -3,8 +3,8 @@
     <section class="shadow">
         <article class="border">
             <div class="border-l-2 border-transparent">
-                <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none"
-                    @click.self="tab != '{{ $mappedAbility['subject'] }}' ? tab = '{{ $mappedAbility['subject'] }}' : tab = '' ">
+                <header class="flex justify-between items-center px-5 py-2 pl-8 pr-8 cursor-pointer select-none"
+                    @click="tab != '{{ $mappedAbility['subject'] }}' ? tab = '{{ $mappedAbility['subject'] }}' : tab = '' ">
                     <span class="text-grey-darkest font-thin text-xl">
                         {{ $mappedAbility['subject'] }}
                     </span>

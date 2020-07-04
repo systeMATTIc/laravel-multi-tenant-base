@@ -1,4 +1,4 @@
-<div class="lg:bg-gray-50 bg-purple-900 w-full flex lg:flex-row flex-col lg:justify-center lg:items-center"
+<div class="lg:bg-gray-50 bg-teal-900 w-full flex lg:flex-row flex-col lg:justify-center lg:items-center"
 	x-data="{ open: false }">
 
 	<div class="w-full mx-auto flex justify-end items-center">
@@ -15,12 +15,12 @@
 
 			<div class="space-x-4 hidden lg:block px-6">
 				<a href="{{ route('admin.profile') }}"
-					class="font-medium px-2 py-6 text-gray-400 hover:bg-indigo-50 cursor-pointer transition ease-in-out duration-150">
+					class="font-medium px-2 py-6 text-gray-400 hover:bg-teal-50 cursor-pointer transition ease-in-out duration-150">
 					{{ auth('admin')->user()->name }}
 				</a>
 				<a href="{{ route('admin.logout') }}"
 					onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-					class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+					class="font-medium text-teal-600 hover:text-teal-500 focus:outline-none focus:underline transition ease-in-out duration-150">
 					Log out
 				</a>
 
@@ -29,7 +29,7 @@
 				</form>
 			</div>
 
-			<div class="flex items-center cursor-pointer lg:hidden hover:bg-purple-800 hover:text-purple-100 text-purple-200 focus:text-purple-100 p-6"
+			<div class="flex items-center cursor-pointer lg:hidden hover:bg-teal-800 hover:text-teal-100 text-teal-200 focus:text-teal-100 p-6"
 				@click="open = ! open">
 				<svg class="fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
 					<path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
@@ -51,12 +51,12 @@
 		<div class="flex justify-end">
 			@auth('admin')
 			<a href="{{ route('admin.profile') }}"
-				class="px-2 py-4 font-medium text-purple-200 hover:bg-purple-800 cursor-pointer transition ease-in-out duration-150">
+				class="px-2 py-4 font-medium text-teal-200 hover:bg-teal-800 cursor-pointer transition ease-in-out duration-150">
 				{{ auth('admin')->user()->name }}
 			</a>
 			<a href="{{ route('admin.logout') }}"
 				onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
-				class="px-8 py-4 block h-full cursor-pointer font-medium lg:text-indigo-600 lg:hover:text-indigo-500 text-purple-200 hover:bg-purple-800 lg:hover:bg-indigo-100 focus:outline-none focus:underline transition ease-in-out duration-150">
+				class="px-8 py-4 block h-full cursor-pointer font-medium lg:text-teal-600 lg:hover:text-teal-500 text-teal-200 hover:bg-teal-800 lg:hover:bg-teal-100 focus:outline-none focus:underline transition ease-in-out duration-150">
 				Log out
 			</a>
 
@@ -67,26 +67,26 @@
 		</div>
 
 		<a href="{{ route('admin.home') }}"
-			class="py-4 px-6 text-purple-200 cursor-pointer border-l-4 border-transparent hover:bg-purple-800 hover:border-purple-100 hover:text-purple-50 {{ (strpos(Route::currentRouteName(), 'admin.home') === 0) ? 'bg-purple-800 border-purple-100' : '' }}">
+			class="py-4 px-6 text-teal-200 cursor-pointer border-l-4 border-transparent hover:bg-teal-800 hover:border-teal-100 hover:text-teal-50 {{ (strpos(Route::currentRouteName(), 'admin.home') === 0) ? 'bg-teal-800 border-teal-100' : '' }}">
 			Dashboard
 		</a>
 
 		@can('view-tenant-list')
 		<a href="{{ route('admin.tenants.index') }}"
-			class="py-4 px-6 text-purple-200 cursor-pointer border-l-4 border-transparent hover:bg-purple-800 hover:border-purple-100 hover:text-purple-50 {{ (strpos(Route::currentRouteName(), 'admin.tenants') === 0) ? 'bg-purple-800 border-purple-100' : '' }}">
+			class="py-4 px-6 text-teal-200 cursor-pointer border-l-4 border-transparent hover:bg-teal-800 hover:border-teal-100 hover:text-teal-50 {{ (strpos(Route::currentRouteName(), 'admin.tenants') === 0) ? 'bg-teal-800 border-teal-100' : '' }}">
 			Tenants
 		</a>
 		@endcan
 
 		@can('view-administrator-list')
 		<a href="{{ route('admin.users.index') }}"
-			class="py-4 px-6 text-purple-200 cursor-pointer border-l-4 border-transparent hover:bg-purple-800 hover:border-purple-100 hover:text-purple-50 {{ (strpos(Route::currentRouteName(), 'admin.users') === 0) ? 'bg-purple-800 border-purple-100' : '' }}">
+			class="py-4 px-6 text-teal-200 cursor-pointer border-l-4 border-transparent hover:bg-teal-800 hover:border-teal-100 hover:text-teal-50 {{ (strpos(Route::currentRouteName(), 'admin.users') === 0) ? 'bg-teal-800 border-teal-100' : '' }}">
 			Administrators
 		</a>
 		@endcan
 		@can('view-roles')
 		<a href="{{ route('admin.roles.index') }}"
-			class="py-4 px-6 text-purple-200 cursor-pointer border-l-4 border-transparent hover:bg-purple-800 hover:border-purple-100 hover:text-purple-50 {{ (strpos(Route::currentRouteName(), 'admin.roles') === 0) ? 'bg-purple-800 border-purple-100' : '' }}">
+			class="py-4 px-6 text-teal-200 cursor-pointer border-l-4 border-transparent hover:bg-teal-800 hover:border-teal-100 hover:text-teal-50 {{ (strpos(Route::currentRouteName(), 'admin.roles') === 0) ? 'bg-teal-800 border-teal-100' : '' }}">
 			Roles
 		</a>
 		@endcan

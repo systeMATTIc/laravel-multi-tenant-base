@@ -77,7 +77,7 @@ New Tenant
                 class="px-4 py-1 text-white tracking-wider bg-orange-500 hover:bg-orange-600 rounded" type="button">
                 Back
             </a>
-            <button class="px-4 py-1 text-white tracking-wider bg-purple-700 hover:bg-purple-500 rounded" type="submit">
+            <button class="px-4 py-1 text-white tracking-wider bg-teal-700 hover:bg-teal-500 rounded" type="submit">
                 Create
             </button>
         </div>
