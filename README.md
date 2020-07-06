@@ -19,17 +19,13 @@ These features are accompanied with a fully responsive user interface to help ge
 With respect to being opinionated. This bootstrapper tries to imbibe the opinions of each technology in the **TALL** Stack as these opinions make developing production grade applications a breeze.
 Any developer utilizing this bootstrapper is encouraged to do the same.
 
-## Usage
+## Setup
 
 1.  Requirements
 
 ```
-PHP 7.4^, MYSQL 5.7^
+PHP 7.4, MYSQL 5.7
 ```
-
-> If you don't have `PHP 7.4` installed, the project contains an already setup docker environment using vessel. Visit [Vessel's](https://vessel.shippingdocker.com/docs/get-started/#initialize) documentation to setup
-
-> **Note** you would not need to install vessel again, you only need to initialize and start usage
 
 2.  Clone the repository:
 
@@ -62,21 +58,32 @@ npm run dev
 5. Install the application
 
 ```
-php artisan base:install
+php artisan install
 ```
 
 This will run migrations and populate base records. You'll be prompted with some questions with regards to creating your administrator account.
 
 6. Access the application
 
-    > Visit `http://{your-app-route}/login` to access the application.
+> Visit `http://{your-app-route}/admin/login` to access the application.
 
 7. Start building your application
+
+## Environment Variables
+
+When creating a new tenant, the following `env` variables are required
+
+> `BASE_URL`: This is the base url of your domain
+
+> `TENANT_SUBDOMAIN_SUFFIX`: if any value is provided here, the subdomain is suffixed with it.
+
+> `TENANT_SUBDOMAIN`: _Boolean_ - indicates if a tenant is assigned a subdomain or created on a new domain.
 
 ## Credits
 
 -   Laravel
--   AlpineJS Livewire
+-   AlpineJS
+-   Livewire
 -   Tailwindcss
 -   Spatie/laravel-multitenancy
 -   Silber/Bouncer
